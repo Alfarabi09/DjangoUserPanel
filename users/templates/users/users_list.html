@@ -1,0 +1,67 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <h2>Users List</h2>
+    <form method="post" action="{% url 'users:users_list' %}">
+        {% csrf_token %}
+        <div class="toolbar mb-3">
+            <button type="submit" name="action" value="block" class="btn btn-warning">Block</button>
+            <button type="submit" name="action" value="unblock" class="btn btn-success">Unblock</button>
+            <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+        </div>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select_all"></th>  <!-- Checkbox without text -->
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                    <th>Last Login</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td><input type="checkbox" name="selected_users" value="{{ user.id }}" class="user-checkbox"></td>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.date_joined|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>{{ user.last_login|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>{{ user.is_active|yesno:"Active,Inactive" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        console.log('DOM fully loaded and parsed');
+        
+        document.getElementById('select_all').addEventListener('change', function (e) {
+            console.log('Select all checkbox changed');
+            var checkboxes = document.querySelectorAll('.user-checkbox');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = e.target.checked;
+            }
+        });
+    });
+</script>
+    
+
+{% endblock %}
+
+
+    
