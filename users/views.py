@@ -13,6 +13,7 @@ def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            print(form)
             user = form.save()
             login(request, user)
             return redirect('users:login')
@@ -24,12 +25,24 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
+        
+        if user is not None and not user.is_active:
+            return render(request, 'users/login.html', {
+                'error': 'Your account has been blocked. Please contact administrator if you think this is an error.'
+            })
+        
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('users:home')
+            return redirect('users:users_list')
         else:
             return render(request, 'users/login.html', {'error': 'Invalid username or password'})
+    
     return render(request, 'users/login.html')
 
 def logout_view(request):
