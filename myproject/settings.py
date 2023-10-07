@@ -110,6 +110,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
-#CSRF_TRUSTED_ORIGINS = ['http://51.20.105.88']
+CSRF_TRUSTED_ORIGINS = ['http://51.20.105.88']
