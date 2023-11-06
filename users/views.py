@@ -84,3 +84,5 @@ def block_users(request):
         users.update(is_active=False)
         
         return redirect('users:users_list')
+
+#qwe
